@@ -1,0 +1,164 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "0f4af99e-3796-42c1-935a-9f6fd3e50cd6",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "a0734b3e-2b18-40ca-8a21-c56ca3111592",
+      "name": "Webhook",
+      "webhookId": "0f4af99e-3796-42c1-935a-9f6fd3e50cd6"
+    },
+    {
+      "parameters": {
+        "url": "https://api.abuseipdb.com/api/v2/check",
+        "authentication": "genericCredentialType",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "ipAddress",
+              "value": "={{ $json.body.ip }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "=4ab6e352dbeddae773c8e467bbafbb294ef5ad183694a491aa9a156e2f851de1eab1483e9d56dac8"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "02badff5-de05-4d63-8e04-5bbe1e9b193e",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7905949f-89c8-433a-b046-590a3dba8b30",
+              "leftValue": "={{ $json.data.abuseConfidenceScore }}",
+              "rightValue": 50,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        0
+      ],
+      "id": "af622563-4137-4eb8-a0af-57c33fc5e8b6",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "jeamalvarez@gmail.com",
+        "subject": "⚠️ IP sospechosa detectada",
+        "emailType": "text",
+        "message": "=IP: {{ $json.data.ipAddress }} Score de riesgo: {{ $json.data.abuseConfidenceScore }} ISP: {{ $json.data.isp }} País: {{ $json.data.countryCode }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        672,
+        -96
+      ],
+      "id": "f3e288ca-edbe-431d-b402-730a98dd2127",
+      "name": "Send a message",
+      "webhookId": "7defe7d0-5a2b-4424-af25-03aa7e275b75",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1zEGD1KyBlw9Z1hU",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "60b897f8-caac-4289-9b2b-f1ce721a2f2e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5e6d6ddcdc705aa78a29d5f62f8d1239e788206adbe1b8489d5c6ce9ef210510"
+  },
+  "nodeGroups": [],
+  "id": "ygp54JnetSz02pGs",
+  "tags": []
+}
