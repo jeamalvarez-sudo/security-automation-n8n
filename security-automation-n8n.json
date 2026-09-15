@@ -20,7 +20,8 @@
     {
       "parameters": {
         "url": "https://api.abuseipdb.com/api/v2/check",
-        "authentication": "genericCredentialType",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "httpMultipleHeadersAuth",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -33,10 +34,6 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "key",
-              "value": "=4ab6e352dbeddae773c8e467bbafbb294ef5ad183694a491aa9a156e2f851de1eab1483e9d56dac8"
-            },
             {
               "name": "Accept",
               "value": "application/json"
@@ -52,7 +49,13 @@
         0
       ],
       "id": "02badff5-de05-4d63-8e04-5bbe1e9b193e",
-      "name": "HTTP Request"
+      "name": "HTTP Request",
+      "credentials": {
+        "httpMultipleHeadersAuth": {
+          "id": "JXUahJ9UxWYCmCUM",
+          "name": "Multiple Headers Auth account"
+        }
+      }
     },
     {
       "parameters": {
@@ -153,7 +156,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "60b897f8-caac-4289-9b2b-f1ce721a2f2e",
+  "versionId": "4e576d85-53e5-4cf6-8706-f069f3d5a201",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "5e6d6ddcdc705aa78a29d5f62f8d1239e788206adbe1b8489d5c6ce9ef210510"
